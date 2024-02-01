@@ -23,14 +23,16 @@ public class AppUserDetailsImpl implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    private boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
     public AppUserDetailsImpl(UUID id, String username, String email, String password,
-                              Collection<? extends GrantedAuthority> authorities) {
+                              boolean activated, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.enabled = enabled;
         this.authorities = authorities;
     }
 
@@ -44,6 +46,7 @@ public class AppUserDetailsImpl implements UserDetails {
                 appUser.getUsername(),
                 appUser.getEmail(),
                 appUser.getPassword(),
+                appUser.isActivated(),  // Use the isActivated method to check if the account is activated
                 authorities);
     }
 

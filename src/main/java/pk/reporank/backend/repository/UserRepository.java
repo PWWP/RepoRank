@@ -11,11 +11,16 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<AppUser, UUID> {
 
-    Optional<AppUser> findByUsernameOrEmail(String usernamename, String email);
+    Optional<AppUser> findByEmail(String email);
 
-    Optional<AppUser> findByUsername(String usernamename);
+
+    Optional<AppUser> findByUsername(String username);
 
     boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
+
+    Optional<AppUser> findByActivationToken(String activationToken);
+    Optional<AppUser> findByResetToken(String resetToken);
 
 }

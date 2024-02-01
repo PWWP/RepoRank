@@ -22,11 +22,16 @@ import pk.reporank.backend.service.AppUserDetailsServiceImpl;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-    @Autowired
+
+    final
     AppUserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final AuthEntryPointJwt unauthorizedHandler;
+
+    public SecurityConfig(AppUserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -60,7 +65,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("**").permitAll()
+                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/v3/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -70,4 +77,30 @@ public class SecurityConfig {
 
         return http.build();
     }
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests((requests) -> requests
+//                        .requestMatchers("/auth/**").permitAll()
+//                        .requestMatchers("/v3/**").permitAll()
+//                        .requestMatchers("/swagger-ui/**").permitAll()
+//                        .anyRequest().authenticated()
+//                );
+//
+//        return http.build();
+//    }
+
+    //   private static final String[] SWAGGER_PATHS = {"/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**"};
+
+//    @Bean
+//    SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+//        return http
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(SWAGGER_PATHS).permitAll()
+//                        .anyRequest().authenticated())
+//                .build();
+//    }
+
+
 }

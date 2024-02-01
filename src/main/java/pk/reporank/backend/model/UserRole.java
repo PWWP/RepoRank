@@ -22,5 +22,5 @@ public class UserRole {
         this.name = name;
     }
 
-    // getters and setters
+
 }
